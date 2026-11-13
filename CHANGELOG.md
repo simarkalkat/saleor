@@ -2,6 +2,11 @@
 
 All notable, unreleased changes to this project will be documented in this file. For the released changes, please visit the [Releases](https://github.com/saleor/saleor/releases) page.
 
+## Unreleased — fork demo
+
+- Add an optional Rick Owens demo catalog overlay with a replacement tee,
+  transparent sneaker image, and featured collection ordering.
+
 # 3.23.0
 
 ### Breaking changes
