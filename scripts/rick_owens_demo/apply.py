@@ -1,6 +1,7 @@
 """Apply the optional catalog overlay to an existing populated demo database."""
 
 import copy
+from decimal import Decimal
 from pathlib import Path
 
 from django.conf import settings
@@ -8,7 +9,14 @@ from django.core.files.base import ContentFile
 from django.db import transaction
 from PIL import Image
 
-from saleor.product.models import Collection, CollectionProduct, Product, ProductMedia
+from saleor.product.models import (
+    Collection,
+    CollectionProduct,
+    Product,
+    ProductChannelListing,
+    ProductMedia,
+    ProductVariantChannelListing,
+)
 from saleor.thumbnail.models import Thumbnail
 from saleor.warehouse.models import Stock
 
@@ -137,6 +145,22 @@ def apply():
             "sneakers.png",
             "Rick Owens Geobasket sneakers in milk and black, background removed",
         )
+        for product, price in (
+            (shirt, Decimal("599.00")),
+            (sneakers, Decimal("1009.00")),
+        ):
+            ProductVariantChannelListing.objects.filter(
+                variant__product=product,
+                channel__slug="default-channel",
+                currency="USD",
+            ).update(
+                price_amount=price,
+                discounted_price_amount=price,
+                prior_price_amount=None,
+            )
+            ProductChannelListing.objects.filter(
+                product=product, channel__slug="default-channel", currency="USD"
+            ).update(discounted_price_amount=price, discounted_price_dirty=False)
         others = list(
             CollectionProduct.objects.filter(collection=collection)
             .exclude(product__in=[shirt, sneakers])

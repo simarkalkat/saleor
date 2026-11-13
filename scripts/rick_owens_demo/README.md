@@ -6,8 +6,11 @@ change the default seed data or application behavior.
 - Replaces the blue Monospace Tee with a black Rick Owens Level T-Shirt.
 - Adds milk/black Rick Owens Geobasket sneakers with a transparent PNG cutout.
 - Places the sneakers immediately after the shirt in `featured-products`.
-- Retains the shirt's sample prices and sizes. Sneakers copy the Plimsolls demo
-  prices, size attributes, channel listings, and warehouses, with 10 units per stock.
+- Sets all shirt sizes to $599 and all sneaker sizes to $1,009 in the USD
+  `default-channel`, without inherited sale or prior-price amounts.
+- Retains the shirt's sizes. Sneakers copy the Plimsolls demo size attributes,
+  channel listings, and warehouses, with 10 units per stock. Other channels keep
+  their existing demo prices.
 - Preserves other featured products and their relative order.
 
 ## Apply
@@ -25,7 +28,8 @@ The standard demo products `ascii-tee`, `blue-plimsolls`, and the
 first only on a fresh demo database.
 
 Re-running the overlay does not duplicate products, variants, stock, or images.
-Existing sneaker stock and prices are preserved on subsequent runs.
+Existing sneaker stock is preserved on subsequent runs. The specified USD prices
+are reapplied on each run, including to products created by an earlier version.
 Database writes are atomic; media storage is not transactional.
 Refresh the storefront's collection/product cache after applying (or restart
 its development server) and reload the homepage. The shirt keeps its original
